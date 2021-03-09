@@ -1,0 +1,35 @@
+import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    token: localStorage.getItem("token") || "",
+    user: localStorage.getItem("user") || "",
+    refresh_token: localStorage.getItem("refresh_token") || ""
+  },
+  mutations: {
+    saveToken(state, response) {
+      state.token = response.access_token;
+      localStorage.setItem("token", response.access_token);
+      localStorage.setItem("refresh_token", response.refresh_token);
+      localStorage.setItem("created_in", new Date().getTime().toString());
+    },
+    removeToken(state) {
+      state.token = "";
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("created_in");
+    }
+  },
+  getters: {
+    getUserName(state) {
+      return state.username;
+    },
+    isAuth(state) {
+      return state.token;
+    }
+  },
+  modules: {}
+});
