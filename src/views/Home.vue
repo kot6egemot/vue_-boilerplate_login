@@ -26,16 +26,25 @@
 // eslint-disable-next-line no-unused-vars
 import { get_user } from "@/api/auth";
 import { doLogout } from "@/utils/request";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
   created() {
-    get_user();
+    if (!this.getUser) {
+      get_user().then(response => {
+        this.$store.commit("setUser", response.data);
+      });
+    }
   },
   methods: {
     async onLogout() {
       doLogout();
     }
+  },
+  computed: {
+    // смешиваем результат mapGetters с внешним объектом computed
+    ...mapGetters(["getUser"])
   }
 };
 </script>

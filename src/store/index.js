@@ -6,7 +6,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem("token") || "",
-    user: localStorage.getItem("user") || "",
     refresh_token: localStorage.getItem("refresh_token") || ""
   },
   mutations: {
@@ -21,11 +20,14 @@ export default new Vuex.Store({
       localStorage.removeItem("token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("created_in");
+    },
+    setUser(state, response) {
+      state.user = response;
     }
   },
   getters: {
-    getUserName(state) {
-      return state.username;
+    getUser(state) {
+      return state.user;
     },
     isAuth(state) {
       return state.token;
