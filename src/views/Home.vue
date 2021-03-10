@@ -4,16 +4,21 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
-            Конфигуратор скуд
+            Title
           </v-list-item-title>
-          <v-list-item-subtitle></v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-subtitle>A Block</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
       <v-divider></v-divider>
     </v-navigation-drawer>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
+
+      <v-toolbar-title>{{ username }}</v-toolbar-title>
       <v-btn icon @click.stop="onLogout()">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
@@ -23,19 +28,25 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import { get_user } from "@/api/auth";
 import { doLogout } from "@/utils/request";
 import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
-  created() {
+  data() {
+    return {
+      username: ""
+    };
+  },
+  async created() {
     if (!this.getUser) {
-      get_user().then(response => {
+      await get_user().then(response => {
         this.$store.commit("setUser", response.data);
       });
     }
+    const user = this.getUser;
+    this.username = user.username;
   },
   methods: {
     async onLogout() {
@@ -43,7 +54,6 @@ export default {
     }
   },
   computed: {
-    // смешиваем результат mapGetters с внешним объектом computed
     ...mapGetters(["getUser"])
   }
 };
