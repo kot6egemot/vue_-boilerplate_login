@@ -1,4 +1,4 @@
-# web_hrbonus
+# Project name
 
 ## Project setup
 ```
