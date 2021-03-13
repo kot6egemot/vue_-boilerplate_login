@@ -8,22 +8,40 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-subtitle>A Block</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list dense nav>
+        <template v-for="menu in menu_items">
+          <v-list-item
+            :to="`${menu.entity}`"
+            :title="menu.title"
+            :key="menu.title"
+            link
+          >
+            <v-list-item-icon>
+              <v-icon>{{ menu.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ menu.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-list>
+
       <v-divider></v-divider>
     </v-navigation-drawer>
     <v-app-bar app color="primary" dark>
       <v-spacer></v-spacer>
-
       <v-toolbar-title>{{ username }}</v-toolbar-title>
       <v-btn icon @click.stop="onLogout()">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-main> </v-main>
+    <v-main>
+      <v-container fluid>
+        <router-view :key="$route.fullPath"></router-view>
+      </v-container>
+    </v-main>
   </div>
 </template>
 
@@ -31,12 +49,14 @@
 import { get_user } from "@/api/auth";
 import { doLogout } from "@/utils/request";
 import { mapGetters } from "vuex";
+import menu_items from "@/utils/temp/menu_items";
 
 export default {
   name: "Home",
   data() {
     return {
-      username: ""
+      username: "",
+      menu_items: menu_items
     };
   },
   async created() {

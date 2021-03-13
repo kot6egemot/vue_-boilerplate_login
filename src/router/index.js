@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import Home from "../views/Home.vue";
 import store from "@/store";
+import List from "@/components/admin/List";
 
 Vue.use(VueRouter);
 
@@ -15,8 +16,16 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
-  }
+    component: Home,
+    children: [
+      {
+        path: "users",
+        component: List,
+        props: { title: "Пользователи", entity: "users" }
+      }
+    ]
+  },
+  { path: "*", redirect: "/" }
 ];
 
 const router = new VueRouter({
