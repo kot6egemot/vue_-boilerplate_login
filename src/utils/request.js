@@ -52,8 +52,9 @@ service.interceptors.request.use(function(config) {
   if (token_has_expired() && config.url !== "/auth/refresh_tokens") {
     doRefreshToken();
   }
-
   const token = localStorage.getItem("token");
+  console.log(token);
+
   config.headers.Authorization = token ? `Bearer ${token}` : "";
   return config;
 });

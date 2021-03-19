@@ -3,7 +3,9 @@ import VueRouter from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import Home from "../views/Home.vue";
 import store from "@/store";
-import List from "@/components/admin/List";
+import ListItem from "@/components/admin/ListItems";
+import ItemUpdate from "@/components/admin/ItemUpdate";
+import ItemCreate from "@/components/admin/ItemCreate";
 
 Vue.use(VueRouter);
 
@@ -20,7 +22,17 @@ const routes = [
     children: [
       {
         path: "users",
-        component: List,
+        component: ListItem,
+        props: { title: "Пользователи", entity: "users" }
+      },
+      {
+        path: "users/update/:id",
+        component: ItemUpdate,
+        props: { title: "Пользователи", entity: "users" }
+      },
+      {
+        path: "users/create",
+        component: ItemCreate,
         props: { title: "Пользователи", entity: "users" }
       }
     ]

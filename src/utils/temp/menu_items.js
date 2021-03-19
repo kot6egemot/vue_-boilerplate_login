@@ -1,4 +1,4 @@
-import List from "@/components/admin/List";
+import List from "@/components/admin/ListItems";
 
 const menu_items = [
   {

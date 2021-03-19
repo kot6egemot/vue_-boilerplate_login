@@ -22,17 +22,19 @@ export function entity_form(entity) {
   });
 }
 
-export function entity_create(entity) {
+export function entity_create(entity, data) {
   return request({
     url: admin_rout_prefix + `/${entity}` + "/create",
-    method: "put"
+    method: "put",
+    data
   });
 }
 
-export function entity_update(entity, id) {
+export function entity_update(entity, id, data) {
   return request({
     url: admin_rout_prefix + `/${entity}` + "/update" + `/${id}`,
-    method: "post"
+    method: "post",
+    data
   });
 }
 

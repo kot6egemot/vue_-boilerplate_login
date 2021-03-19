@@ -11,7 +11,7 @@
       <v-list dense nav>
         <template v-for="menu in menu_items">
           <v-list-item
-            :to="`${menu.entity}`"
+            :to="`/${menu.entity}`"
             :title="menu.title"
             :key="menu.title"
             link

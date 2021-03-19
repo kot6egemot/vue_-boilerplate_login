@@ -11,6 +11,7 @@ export default new Vuex.Store({
   },
   mutations: {
     saveToken(state, response) {
+      console.log(response);
       state.token = response.access_token;
       localStorage.setItem("token", response.access_token);
       localStorage.setItem("refresh_token", response.refresh_token);
