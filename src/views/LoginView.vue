@@ -51,13 +51,18 @@ export default {
   methods: {
     async startAuth() {
       const fingerprint = await getFingerPrint();
-      let response = await login({
+      login({
         username: this.username,
         password: this.password,
         fingerprint
-      });
-      await this.$store.commit("saveToken", response.data);
-      await this.$router.push({ name: "Home" });
+      })
+        .then(response => {
+          this.$store.commit("saveToken", response.data);
+          this.$router.push({ name: "Home" });
+        })
+        .catch(() => {
+          this.snackbar = true;
+        });
     }
   }
 };

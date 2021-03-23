@@ -48,13 +48,15 @@ export function doLogout() {
   document.location.replace("/login");
 }
 
+function is_auth_points(url) {
+  ["/auth/refresh_tokens", "/auth/login", "/auth/logout"].includes(url);
+}
+
 service.interceptors.request.use(function(config) {
-  if (token_has_expired() && config.url !== "/auth/refresh_tokens") {
+  if (token_has_expired() && !is_auth_points(config.url)) {
     doRefreshToken();
   }
   const token = localStorage.getItem("token");
-  console.log(token);
-
   config.headers.Authorization = token ? `Bearer ${token}` : "";
   return config;
 });
@@ -64,7 +66,7 @@ service.interceptors.response.use(
     return response;
   },
   error => {
-    if (error.response.status === 401) {
+    if (error.response.status === 401 && is_auth_points(error.config.url)) {
       doRefreshToken().then(() => {
         document.location.reload();
       });
