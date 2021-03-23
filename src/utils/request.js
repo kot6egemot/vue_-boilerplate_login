@@ -35,6 +35,7 @@ function doRefreshToken() {
     refresh_token({ fingerprint, refresh_token: str_refresh_token })
       .then(r => {
         store.commit("saveToken", r.data);
+        document.location.reload();
       })
       .catch(() => {
         doLogout();
@@ -45,7 +46,7 @@ function doRefreshToken() {
 export function doLogout() {
   logout();
   store.commit("removeToken");
-  document.location.replace("/login");
+  document.location.replace("/auth/login");
 }
 
 function is_auth_points(url) {
@@ -66,10 +67,13 @@ service.interceptors.response.use(
     return response;
   },
   error => {
-    if (error.response.status === 401 && is_auth_points(error.config.url)) {
-      doRefreshToken().then(() => {
-        document.location.reload();
-      });
+    if (
+      error.response.status === 401 &&
+      error.config.url === "/auth/refresh_tokens"
+    ) {
+      doLogout();
+    } else {
+      doRefreshToken();
     }
     return error;
   }

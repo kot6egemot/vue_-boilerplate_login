@@ -14,6 +14,10 @@
         </v-btn>
       </v-form>
     </v-card-text>
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="6000">
+      {{ snackbar.text }}
+      <v-btn dark text @click="snackbar.show = false">Закрыть</v-btn>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -47,12 +51,17 @@ export default {
   methods: {
     onCreate() {
       entity_create(this.entity, this.item)
-        .then(r => {
-          console.log(r);
+        .then(() => {
+          this.showSnackbar("Запись успешно создана", "green");
         })
         .catch(error => {
-          console.log(error);
+          this.showSnackbar(`Произошла ошибка ${error}`, "red");
         });
+    },
+    showSnackbar(text, color) {
+      this.snackbar.show = true;
+      this.snackbar.text = text;
+      this.snackbar.color = color;
     }
   }
 };

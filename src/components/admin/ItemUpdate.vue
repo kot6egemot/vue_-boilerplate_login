@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title> Создать запись раздела {{ title }} </v-card-title>
+    <v-card-title> Создать запись раздела {{ title }}</v-card-title>
     <v-card-text>
       <v-form v-model="form_is_valid">
         <v-text-field
@@ -14,6 +14,10 @@
         </v-btn>
       </v-form>
     </v-card-text>
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="6000">
+      {{ snackbar.text }}
+      <v-btn dark text @click="snackbar.show = false">Закрыть</v-btn>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -27,7 +31,12 @@ export default {
     return {
       headers: [],
       item: {},
-      form_is_valid: false
+      form_is_valid: false,
+      snackbar: {
+        show: false,
+        text: "",
+        color: ""
+      }
     };
   },
   mounted() {
@@ -44,10 +53,10 @@ export default {
       .then(r => {
         const response_data = r.data;
         this.item = response_data[this.entity];
-        console.log(r);
+        this.showSnackbar("Запись успешно создана", "green");
       })
       .catch(error => {
-        console.log(error);
+        this.showSnackbar(`Произошла ошибка ${error}`, "red");
       });
   },
   methods: {
@@ -59,6 +68,11 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    showSnackbar(text, color) {
+      this.snackbar.show = true;
+      this.snackbar.text = text;
+      this.snackbar.color = color;
     }
   }
 };
