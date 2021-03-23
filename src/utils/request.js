@@ -35,6 +35,7 @@ function doRefreshToken() {
     refresh_token({ fingerprint, refresh_token: str_refresh_token })
       .then(r => {
         store.commit("saveToken", r.data);
+        document.location.reload();
       })
       .catch(() => {
         doLogout();
@@ -45,14 +46,17 @@ function doRefreshToken() {
 export function doLogout() {
   logout();
   store.commit("removeToken");
-  document.location.replace("/login");
+  document.location.replace("/auth/login");
+}
+
+function is_auth_points(url) {
+  ["/auth/refresh_tokens", "/auth/login", "/auth/logout"].includes(url);
 }
 
 service.interceptors.request.use(function(config) {
-  if (token_has_expired() && config.url !== "/auth/refresh_tokens") {
+  if (token_has_expired() && !is_auth_points(config.url)) {
     doRefreshToken();
   }
-
   const token = localStorage.getItem("token");
   config.headers.Authorization = token ? `Bearer ${token}` : "";
   return config;
@@ -63,10 +67,13 @@ service.interceptors.response.use(
     return response;
   },
   error => {
-    if (error.response.status === 401) {
-      doRefreshToken().then(() => {
-        document.location.reload();
-      });
+    if (
+      error.response.status === 401 &&
+      error.config.url === "/auth/refresh_tokens"
+    ) {
+      doLogout();
+    } else {
+      doRefreshToken();
     }
     return error;
   }
