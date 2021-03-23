@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title> Создать {{ title }}</v-card-title>
+    <v-card-title> Обновить запись раздела {{ title }}</v-card-title>
     <v-card-text>
       <v-form v-model="form_is_valid">
         <v-text-field
