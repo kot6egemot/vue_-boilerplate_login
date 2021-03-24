@@ -3,12 +3,13 @@
     <v-card-title> Обновить запись раздела {{ title }}</v-card-title>
     <v-card-text>
       <v-form v-model="form_is_valid">
-        <v-text-field
-          :key="header.value"
-          v-for="header in headers"
-          :label="header.text"
-          v-model="item[header.value]"
-        ></v-text-field>
+        <template v-for="header in headers">
+          <v-text-field
+            :key="header.value"
+            :label="header.text"
+            v-model="item[header.value]"
+          ></v-text-field>
+        </template>
         <v-btn color="success" class="mr-4" @click="onCreate">
           Сохранить
         </v-btn>
@@ -31,7 +32,12 @@ export default {
     return {
       headers: [],
       item: {},
-      form_is_valid: false
+      form_is_valid: false,
+      snackbar: {
+        show: false,
+        text: "",
+        color: ""
+      }
     };
   },
   mounted() {
