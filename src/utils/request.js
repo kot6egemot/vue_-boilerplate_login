@@ -35,33 +35,33 @@ service.interceptors.response.use(
     return response;
   },
   error => {
-    if (
-      error.response.status === 401 &&
-      error.config.url === "/auth/refresh_tokens"
-    ) {
-      doLogout();
-      return error;
-    }
-    return TokenStorage.getNewToken()
-      .then(token => {
-        // New request with new token
-        const config = error.config;
-        config.headers["Authorization"] = `Bearer ${token}`;
+    if (error.response.status === 401) {
+      if (error.config.url === "/auth/refresh_tokens") {
+        doLogout();
+        return error;
+      }
+      return TokenStorage.getNewToken()
+        .then(token => {
+          // New request with new token
+          const config = error.config;
+          config.headers["Authorization"] = `Bearer ${token}`;
 
-        return new Promise((resolve, reject) => {
-          service
-            .request(config)
-            .then(response => {
-              resolve(response);
-            })
-            .catch(error => {
-              reject(error);
-            });
+          return new Promise((resolve, reject) => {
+            service
+              .request(config)
+              .then(response => {
+                resolve(response);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          });
+        })
+        .catch(error => {
+          return Promise.reject(error);
         });
-      })
-      .catch(error => {
-        return Promise.reject(error);
-      });
+    }
+    return error;
   }
 );
 
