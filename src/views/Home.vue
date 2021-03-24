@@ -41,9 +41,11 @@ export default {
   },
   async created() {
     if (!this.getUser) {
-      await get_user().then(response => {
-        this.$store.commit("setUser", response.data);
-      });
+      await get_user()
+        .then(response => {
+          this.$store.commit("setUser", response.data);
+        })
+        .catch(() => {});
     }
     const user = this.getUser;
     this.username = user.username;
