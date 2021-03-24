@@ -1,24 +1,23 @@
-# Project name
+Vue Js Authentication с browser fingerprint.
+Реализует 2 роута 
+    1) роут /login с формой входа login/password.
+    2) роут / корень сайта для аутентифицированных пользователей.
 
-## Project setup
+Эндпоинты на серверный стороне
+    1) /auth/login, POST
+        request => {login, password}
+        response = {access_token, refresh_token} 
+    2) /auth/refresh_tokens, POST
+        request => {refresh_token, fingerprint}
+        response = {access_token, refresh_token}   
+    3) /auth/logout
+        request = {} 
+        response = {}
+
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
-```
-
-### Compiles and minifies for production
-```
 npm run build
-```
-
-### Lints and fixes files
-```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
