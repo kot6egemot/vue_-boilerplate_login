@@ -38,6 +38,7 @@
 <script>
 import { login } from "@/api/auth";
 import { getFingerPrint } from "@/utils/request";
+import { TokenStorage } from "@/utils/token_storage";
 
 export default {
   name: "LoginView",
@@ -57,7 +58,8 @@ export default {
         fingerprint
       })
         .then(response => {
-          this.$store.commit("saveToken", response.data);
+          TokenStorage.storeToken(response.data.access_token);
+          TokenStorage.storeRefreshToken(response.data.refresh_token);
           this.$router.push({ name: "Home" });
         })
         .catch(() => {

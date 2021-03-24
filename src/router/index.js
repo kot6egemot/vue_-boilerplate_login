@@ -2,10 +2,10 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import Home from "../views/Home.vue";
-import store from "@/store";
 import ListItem from "@/components/admin/ListItems";
 import ItemUpdate from "@/components/admin/ItemUpdate";
 import ItemCreate from "@/components/admin/ItemCreate";
+import { TokenStorage } from "@/utils/token_storage";
 
 Vue.use(VueRouter);
 
@@ -40,14 +40,14 @@ const routes = [
   { path: "*", redirect: "/" }
 ];
 
-const router = new VueRouter({
+export const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
 });
 
 router.beforeEach((to, from, next) => {
-  let isAuthenticated = store.getters.isAuth;
+  let isAuthenticated = TokenStorage.isAuthenticated();
   if (to.name === "Login" && isAuthenticated) next({ name: "Home" });
   if (to.name !== "Login" && !isAuthenticated) next({ name: "Login" });
   else next();
